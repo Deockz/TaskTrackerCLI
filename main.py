@@ -36,11 +36,11 @@ def add():
     #Update Json file
     data['tasks'] [f'{task_id}']= task_data
     data['task_count'] = task_id
-    print(data)
     file.close()
     with open('list.json', 'w') as outfile:
         json.dump(data, outfile)
     outfile.close()
+    print("Successfully added the task")
     
 def update():
     time = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
@@ -66,7 +66,18 @@ def update():
 
 
 def delete():
-    print('Delete')
+    try:
+        with open('list.json', 'r') as file:
+            data = json.load(file)
+            data['tasks'].pop(f'{sys.argv[2]}')
+        file.close()
+        with open('list.json', 'w') as outfile:
+            json.dump(data, outfile)
+        outfile.close()
+    except KeyError:
+        print('Index error. Task do not exist')
+    except: 
+        print('Error retreiving data.')
 
 def inprg():
     print('Inprg')
@@ -88,6 +99,6 @@ def list():
 if __name__ == '__main__':
     if not os.path.exists('list.json'):
         createJSON()
-    globals()[sys.argv[1]]()
+    globals()[sys.argv[1].lower()]()
     
 
