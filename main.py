@@ -1,18 +1,69 @@
 import sys
 import json
 import os.path
+import datetime
 
 def createJSON ():
-    list_json_template = {'tasks':{'Done':{},'Todo':{},'Inprg':{}}}
+    list_json_template = {'tasks':{},'task_count':0}
     with open('list.json', 'w') as outfile:
         json.dump(list_json_template, outfile)
 
 def add():
-    print('add')
-    
+    #Init new task with status todo, created and updated time
+    time = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+    task_id = 0
+    task_data = {
+        "description" : "",
+        "status" : "todo",
+        "createdAt" :  time,
+        "updatedAt" : time,
+    }
 
+    #Get the index for the new task
+    try:
+        with open('list.json', 'r') as file:
+            data = json.load(file)
+        task_id = data['task_count'] + 1
+    except:
+        print("Error in index. Please contact support")
+    
+    #Get de description from CIL arguments
+    try:
+        task_data['description'] = ' '.join(sys.argv[2:])
+    except:
+        print('Error.Description of task is required in arguments')
+    
+    #Update Json file
+    data['tasks'] [f'{task_id}']= task_data
+    data['task_count'] = task_id
+    print(data)
+    file.close()
+    with open('list.json', 'w') as outfile:
+        json.dump(data, outfile)
+    outfile.close()
+    
 def update():
-    print('Update')
+    time = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
+    try:
+        with open('list.json', 'r') as file:
+            data = json.load(file)
+        task = data['tasks'][f'{sys.argv[2]}']
+        if sys.argv[3:]:
+            task['description'] = ' '.join(sys.argv[3:])
+        else:
+            print('There is not a descrption')
+            task['description'] = 'None'
+        task["updatedAt"] = time
+        data['tasks'][f'{sys.argv[2]}'] = task
+    except KeyError:
+        print('Index error. Task do not exist')
+    except: 
+        print('Error retreiving data.')
+    file.close()
+    with open('list.json', 'w') as outfile:
+        json.dump(data, outfile)
+    outfile.close()
+
 
 def delete():
     print('Delete')
