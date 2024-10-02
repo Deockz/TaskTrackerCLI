@@ -100,7 +100,6 @@ def status():
     except KeyError:
                 print('Index error. Check request format')
 
-
 def list():
     try:
         with open('list.json', 'r') as file:
@@ -108,12 +107,30 @@ def list():
             if len(sys.argv) <3:
                 print('-'*20+'\n' + f'Number of tasks: {len(data['tasks'])}\n'+'-'*20+'\n')
                 for x in data['tasks']:
-                    print(f'Task {x}:\t')
+                    print(f'TaskID {x}:\t')
                     print('Description: '+ data['tasks'][x]['description']+'\t')         
                     print('Status: '+ data['tasks'][x]['status']+'\t') 
                     print('Created At: '+ data['tasks'][x]['createdAt']+'\t') 
                     print('Updated At: '+ data['tasks'][x]['updatedAt']+'\n') 
-                print('-'*20+'\n')   
+                print('-'*20+'\n')
+            else:
+                status = ['done','todo','inprg']
+                if sys.argv[2].lower() in status:
+                    counter=0
+                    for x in data['tasks']:                        
+                        if data['tasks'][x]['status'] == sys.argv[2].lower():
+                            counter += 1
+                    print('-'*20+'\n' + f'Number of tasks: {counter}\n'+'-'*20+'\n')   
+                    for x in data['tasks']:
+                        if data['tasks'][x]['status'] == sys.argv[2].lower():
+                            print(f'TaskID {x}:\t')
+                            print('Description: '+ data['tasks'][x]['description']+'\t')         
+                            print('Status: '+ data['tasks'][x]['status']+'\t') 
+                            print('Created At: '+ data['tasks'][x]['createdAt']+'\t') 
+                            print('Updated At: '+ data['tasks'][x]['updatedAt']+'\n') 
+                    print('-'*20+'\n')
+                else:
+                    print('Error retreiving data. Check request')
     except KeyError:
         print('Index error. Task do not exist')
     except: 
