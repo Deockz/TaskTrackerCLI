@@ -79,6 +79,7 @@ def delete():
         print('Error retreiving data.')
 
 def status():
+    time = datetime.datetime.now().strftime('%m/%d/%Y %H:%M:%S')
     try:
         status = ['todo','inprg','done']
         if sys.argv[2].lower() in status:
@@ -86,6 +87,7 @@ def status():
                 with open('list.json', 'r') as file:
                     data = json.load(file)
                     data['tasks'][f'{sys.argv[3]}']['status'] = f'{sys.argv[2].lower()}'
+                    data['tasks'][f'{sys.argv[3]}']['updatedAt'] = time
                 file.close()
                 with open('list.json', 'w') as outfile:
                     json.dump(data, outfile)
