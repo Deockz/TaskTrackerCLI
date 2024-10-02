@@ -64,7 +64,6 @@ def update():
         json.dump(data, outfile)
     outfile.close()
 
-
 def delete():
     try:
         with open('list.json', 'r') as file:
@@ -79,26 +78,54 @@ def delete():
     except: 
         print('Error retreiving data.')
 
-def inprg():
-    print('Inprg')
+def status():
+    try:
+        status = ['todo','inprg','done']
+        if sys.argv[2].lower() in status:
+            try:
+                with open('list.json', 'r') as file:
+                    data = json.load(file)
+                    data['tasks'][f'{sys.argv[3]}']['status'] = f'{sys.argv[2].lower()}'
+                file.close()
+                with open('list.json', 'w') as outfile:
+                    json.dump(data, outfile)
+                outfile.close()
+                print('Succesfull status change')
+            except KeyError:
+                print('Index error. Task do not exist')
+            except: 
+                print('Error retreiving data.')
+        else:
+            print('Status not valid. Please use Todo, Inpgr or Done')
+    except KeyError:
+                print('Index error. Check request format')
 
-def done():
-    print('Done')
 
 def list():
-    
-    with open('list.json', 'r') as file:
-        data = json.load(file)
-    if len(sys.argv)<3:
-        print(data['tasks'])
-    else:
-         consult = sys.argv[2].lower()
-         print(data['tasks'][consult])
+    try:
+        with open('list.json', 'r') as file:
+            data = json.load(file)
+            if len(sys.argv) <3:
+                print('-'*20+'\n' + f'Number of tasks: {len(data['tasks'])}\n'+'-'*20+'\n')
+                for x in data['tasks']:
+                    print(f'Task {x}:\t')
+                    print('Description: '+ data['tasks'][x]['description']+'\t')         
+                    print('Status: '+ data['tasks'][x]['status']+'\t') 
+                    print('Created At: '+ data['tasks'][x]['createdAt']+'\t') 
+                    print('Updated At: '+ data['tasks'][x]['updatedAt']+'\n') 
+                print('-'*20+'\n')   
+    except KeyError:
+        print('Index error. Task do not exist')
+    except: 
+        print('Error retreiving data. Check request')
         
     
 if __name__ == '__main__':
     if not os.path.exists('list.json'):
         createJSON()
-    globals()[sys.argv[1].lower()]()
+    try:
+        globals()[sys.argv[1].lower()]()
+    except:
+        print('Request Error. Check request format')
     
 
