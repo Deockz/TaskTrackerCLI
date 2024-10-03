@@ -6,7 +6,7 @@ import datetime
 def createJSON ():
     list_json_template = {'tasks':{},'task_count':0}
     with open('list.json', 'w') as outfile:
-        json.dump(list_json_template, outfile)
+        json.dump(list_json_template, outfile,indent=4)
 
 def add():
     #Init new task with status todo, created and updated time
@@ -38,7 +38,7 @@ def add():
     data['task_count'] = task_id
     file.close()
     with open('list.json', 'w') as outfile:
-        json.dump(data, outfile)
+        json.dump(data, outfile,indent=4)
     outfile.close()
     print("Successfully added the task")
     
@@ -61,7 +61,7 @@ def update():
         print('Error retreiving data.')
     file.close()
     with open('list.json', 'w') as outfile:
-        json.dump(data, outfile)
+        json.dump(data, outfile,indent=4)
     outfile.close()
 
 def delete():
@@ -71,7 +71,7 @@ def delete():
             data['tasks'].pop(f'{sys.argv[2]}')
         file.close()
         with open('list.json', 'w') as outfile:
-            json.dump(data, outfile)
+            json.dump(data, outfile,indent=4)
         outfile.close()
     except KeyError:
         print('Index error. Task do not exist')
@@ -90,7 +90,7 @@ def status():
                     data['tasks'][f'{sys.argv[3]}']['updatedAt'] = time
                 file.close()
                 with open('list.json', 'w') as outfile:
-                    json.dump(data, outfile)
+                    json.dump(data, outfile,indent=4)
                 outfile.close()
                 print('Succesfull status change')
             except KeyError:
