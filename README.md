@@ -1,11 +1,13 @@
-Task Tracker CLI
+##Task Tracker CLI
 
-About
+#About
 Task Tracker CLI is a programm that help to keep tracking of your task and the status of these.
 To use it you have 5 functions described below:
 
-Add. 
-Sintax: python main.py add 'Description of the task'
+Add
+'''bash
+python main.py add 'Description og the task
+'''
 With this function a new taks will be created. Task ID, created time and updated time will be populated automaclly.
 The status of a new task always will be 'todo'
 
